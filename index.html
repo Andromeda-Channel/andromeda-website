@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andromeda Channel Platform - Healthcare Data Transformation</title>
+    <meta name="description" content="Modern healthcare workflow orchestration and data transformation platform with FHIR R4 support, real-time eligibility checks, and intelligent routing.">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; -webkit-font-smoothing: antialiased; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function AndromedaPreview() {
+          const [isDark, setIsDark] = useState(true);
+          const [currentPage, setCurrentPage] = useState('home');
+          const [selectedEndpoint, setSelectedEndpoint] = useState('authentication');
+          const [apiView, setApiView] = useState('overview');
+
+          const PrivacyPage = () => (
+            <div style={{ background: theme.background, minHeight: 'calc(100vh - 200px)', padding: '4rem 2rem' }}>
+              <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                <h1 style={{ fontSize: '3rem', fontWeight: '800', color: theme.text, marginBottom: '1rem' }}>Privacy Policy</h1>
+                <p style={{ color: theme.textSecondary, marginBottom: '3rem' }}>Last updated: October 27, 2025</p>
+                
+                <div style={{ color: theme.text, lineHeight: '1.8', fontSize: '1rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Overview</h2>
+                  <p>Andromeda Channel Platform ("Andromeda," "we," "us," or "our") is committed to protecting the privacy and security of your health information. This Privacy Policy describes how we collect, use, disclose, and safeguard information in connection with our healthcare data transformation services.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>HIPAA Compliance</h2>
+                  <p>Andromeda is a HIPAA-compliant Business Associate. We maintain administrative, physical, and technical safeguards that comply with HIPAA Security Rule requirements to protect Protected Health Information (PHI) that we process on behalf of our Covered Entity clients.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Information We Process</h2>
+                  <p>As a healthcare data intermediary, we process:</p>
+                  <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem' }}>
+                    <li>Patient demographic information (names, addresses, dates of birth)</li>
+                    <li>Laboratory test orders and requisitions</li>
+                    <li>Laboratory test results and clinical data</li>
+                    <li>Provider information (names, NPIs, contact details)</li>
+                    <li>Insurance and billing information</li>
+                  </ul>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>How We Use Information</h2>
+                  <p>We use PHI solely to provide our data transformation services, which include:</p>
+                  <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem' }}>
+                    <li>Routing laboratory orders between EMR systems and laboratories</li>
+                    <li>Delivering laboratory results to ordering providers</li>
+                    <li>Transforming data between HL7 and FHIR formats</li>
+                    <li>Maintaining audit logs for compliance purposes</li>
+                  </ul>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Data Security</h2>
+                  <p>We implement industry-leading security measures including:</p>
+                  <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem' }}>
+                    <li>End-to-end encryption for data in transit (TLS 1.3)</li>
+                    <li>Encryption at rest for all stored data (AES-256)</li>
+                    <li>OAuth 2.0 authentication for API access</li>
+                    <li>HMAC signature verification for webhook deliveries</li>
+                    <li>Role-based access controls and audit logging</li>
+                    <li>Regular security assessments and penetration testing</li>
+                  </ul>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>SOC 2 Type II Certification</h2>
+                  <p>Andromeda maintains SOC 2 Type II certification, demonstrating our commitment to security, availability, processing integrity, confidentiality, and privacy controls.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Data Retention</h2>
+                  <p>We retain PHI only as long as necessary to provide our services and meet legal obligations. Raw message data is retained for 90 days, while audit logs are maintained for 7 years to comply with HIPAA requirements.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Your Rights</h2>
+                  <p>As a Business Associate, we support our clients in fulfilling patient rights under HIPAA, including rights to access, amendment, and accounting of disclosures. Patients should contact their healthcare provider to exercise these rights.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Contact Us</h2>
+                  <p>For questions about this Privacy Policy or our privacy practices, contact us at:</p>
+                  <p style={{ marginTop: '0.5rem' }}>
+                    Email: <a href="mailto:support@andromeda.channel" style={{ color: theme.primary, textDecoration: 'none', fontWeight: '600' }}>support@andromeda.channel</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+
+          const TermsPage = () => (
+            <div style={{ background: theme.background, minHeight: 'calc(100vh - 200px)', padding: '4rem 2rem' }}>
+              <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                <h1 style={{ fontSize: '3rem', fontWeight: '800', color: theme.text, marginBottom: '1rem' }}>Terms of Service</h1>
+                <p style={{ color: theme.textSecondary, marginBottom: '3rem' }}>Last updated: October 27, 2025</p>
+                
+                <div style={{ color: theme.text, lineHeight: '1.8', fontSize: '1rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Agreement to Terms</h2>
+                  <p>By accessing or using Andromeda Channel Platform services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using our services.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Description of Services</h2>
+                  <p>Andromeda provides healthcare data transformation and routing services, including:</p>
+                  <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem' }}>
+                    <li>Laboratory order placement via RESTful APIs</li>
+                    <li>Laboratory result delivery via webhooks</li>
+                    <li>HL7 to FHIR R4 data transformation</li>
+                    <li>Message routing between EMR systems and laboratories</li>
+                  </ul>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>API Access and Authentication</h2>
+                  <p>Access to our APIs requires valid credentials (Client ID and Client Secret) provided by Andromeda. You agree to:</p>
+                  <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem' }}>
+                    <li>Keep your API credentials secure and confidential</li>
+                    <li>Not share credentials with unauthorized parties</li>
+                    <li>Notify us immediately of any unauthorized access</li>
+                    <li>Use authentication tokens responsibly (caching, not requesting per call)</li>
+                  </ul>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Acceptable Use</h2>
+                  <p>You agree to use our services only for lawful purposes and in compliance with HIPAA and other applicable healthcare regulations. You will not:</p>
+                  <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem' }}>
+                    <li>Attempt to circumvent security measures</li>
+                    <li>Reverse engineer or decompile our services</li>
+                    <li>Use our services to transmit malicious code</li>
+                    <li>Exceed reasonable API rate limits</li>
+                    <li>Submit false or misleading patient information</li>
+                  </ul>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Business Associate Agreement</h2>
+                  <p>Use of Andromeda services requires execution of a separate Business Associate Agreement (BAA) as required under HIPAA. The BAA governs our handling of Protected Health Information and takes precedence over these Terms for PHI-related matters.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Service Level Agreement</h2>
+                  <p>We maintain a 99.99% uptime SLA for our production API endpoints. Specific SLA terms, including credits for downtime, are detailed in your service agreement.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Data Ownership</h2>
+                  <p>You retain all rights to your data. We process data solely as a service provider and do not claim ownership of PHI or other information transmitted through our platform.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Limitation of Liability</h2>
+                  <p>To the maximum extent permitted by law, Andromeda shall not be liable for indirect, incidental, special, consequential, or punitive damages arising from use of our services.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Changes to Terms</h2>
+                  <p>We reserve the right to modify these terms at any time. We will notify users of material changes via email to registered contacts. Continued use of services after changes constitutes acceptance of modified terms.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Termination</h2>
+                  <p>Either party may terminate services with 30 days written notice. Upon termination, we will securely delete or return all PHI as specified in the BAA.</p>
+
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '2rem', marginBottom: '1rem' }}>Contact Information</h2>
+                  <p>For questions about these Terms of Service, contact us at:</p>
+                  <p style={{ marginTop: '0.5rem' }}>
+                    Email: <a href="mailto:support@andromeda.channel" style={{ color: theme.primary, textDecoration: 'none', fontWeight: '600' }}>support@andromeda.channel</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+
+          const styles = {
+            light: {
+              primary: '#3b82f6',
+              primaryDark: '#2563eb',
+              primaryLight: '#60a5fa',
+              secondary: '#8b5cf6',
+              accent: '#06b6d4',
+              background: '#ffffff',
+              surface: '#f8fafc',
+              text: '#0f172a',
+              textSecondary: '#64748b',
+              border: '#e2e8f0',
+            },
+            dark: {
+              primary: '#60a5fa',
+              primaryDark: '#3b82f6',
+              primaryLight: '#93c5fd',
+              secondary: '#a78bfa',
+              accent: '#22d3ee',
+              background: '#0f172a',
+              surface: '#1e293b',
+              text: '#f1f5f9',
+              textSecondary: '#94a3b8',
+              border: '#334155',
+            }
+          };
+
+          const theme = isDark ? styles.dark : styles.light;
+
+          const AndromedaLogo = ({ size = 32 }) => (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <svg width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.3))' }}>
+                <circle cx="50" cy="50" r="45" fill="none" stroke={theme.primary} strokeWidth="2" opacity="0.3" />
+                <circle cx="50" cy="50" r="35" fill="none" stroke={theme.primaryLight} strokeWidth="2" opacity="0.5" />
+                <circle cx="50" cy="50" r="8" fill={theme.primary}>
+                  <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="20" r="3" fill={theme.accent}>
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="80" cy="50" r="2.5" fill={theme.secondary}>
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="15s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="80" r="2" fill={theme.primaryLight}>
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="20s" repeatCount="indefinite" />
+                </circle>
+                <line x1="50" y1="50" x2="50" y2="20" stroke={theme.primary} strokeWidth="1" opacity="0.4" />
+                <line x1="50" y1="50" x2="80" y2="50" stroke={theme.secondary} strokeWidth="1" opacity="0.4" />
+              </svg>
+              <span style={{ fontSize: size * 0.6, fontWeight: '700', background: `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
+                Andromeda
+              </span>
+            </div>
+          );
+
+          const HomePage = () => (
+            <>
+              <div style={{
+                background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+                color: 'white',
+                padding: '8rem 2rem 12rem',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `linear-gradient(${theme.primary}22 1px, transparent 1px), linear-gradient(90deg, ${theme.primary}22 1px, transparent 1px)`,
+                  backgroundSize: '50px 50px',
+                  opacity: 0.4
+                }} />
+                
+                <div style={{
+                  position: 'absolute',
+                  top: '10%',
+                  left: '10%',
+                  width: '400px',
+                  height: '400px',
+                  background: `radial-gradient(circle, ${theme.primary}40, transparent)`,
+                  filter: 'blur(80px)',
+                  opacity: 0.6
+                }} />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0%',
+                  right: '10%',
+                  width: '500px',
+                  height: '500px',
+                  background: `radial-gradient(circle, ${theme.secondary}40, transparent)`,
+                  filter: 'blur(100px)',
+                  opacity: 0.5
+                }} />
+
+                <div style={{ maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+                  <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+                    <div style={{ 
+                      display: 'inline-block',
+                      padding: '0.5rem 1rem',
+                      background: 'rgba(59, 130, 246, 0.1)',
+                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                      borderRadius: '9999px',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      marginBottom: '2rem',
+                      color: theme.primaryLight
+                    }}>
+                      ✨ Workflow Orchestration • FHIR R4 • Real-time Eligibility Checks
+                    </div>
+                    
+                    <h1 style={{ 
+                      fontSize: '4.5rem', 
+                      fontWeight: '800', 
+                      marginBottom: '1.5rem', 
+                      lineHeight: '1.1',
+                      letterSpacing: '-0.03em'
+                    }}>
+                      The Modern Healthcare
+                      <br />
+                      <span style={{
+                        background: 'linear-gradient(135deg, #60a5fa, #a78bfa, #22d3ee)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>
+                        Data Platform
+                      </span>
+                    </h1>
+                    
+                    <p style={{ 
+                      fontSize: '1.375rem', 
+                      marginBottom: '3rem', 
+                      opacity: '0.8',
+                      lineHeight: '1.7',
+                      color: '#cbd5e1'
+                    }}>
+                      Orchestrate complex healthcare workflows with production-grade APIs.
+                      <br />
+                      From eligibility checks to result delivery—automated, reliable, and compliant.
+                    </p>
+                    
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '4rem' }}>
+                      <button 
+                        onClick={() => setCurrentPage('login')}
+                        style={{
+                          padding: '1rem 2.5rem',
+                          fontSize: '1.125rem',
+                          fontWeight: '600',
+                          background: theme.primary,
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          boxShadow: '0 4px 16px rgba(59, 130, 246, 0.4)'
+                        }}>
+                        Start Building →
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setCurrentPage('docs');
+                          setApiView('overview');
+                        }}
+                        style={{
+                          padding: '1rem 2.5rem',
+                          fontSize: '1.125rem',
+                          fontWeight: '600',
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          color: 'white',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          backdropFilter: 'blur(10px)'
+                        }}>
+                        View Documentation
+                      </button>
+                    </div>
+
+                    <div style={{
+                      background: 'rgba(15, 23, 42, 0.9)',
+                      border: '1px solid rgba(59, 130, 246, 0.2)',
+                      borderRadius: '12px',
+                      padding: '1.5rem',
+                      textAlign: 'left',
+                      fontFamily: 'monospace',
+                      fontSize: '0.875rem',
+                      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+                      backdropFilter: 'blur(20px)'
+                    }}>
+                      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444' }} />
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b' }} />
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981' }} />
+                      </div>
+                      <pre style={{ margin: 0, color: '#cbd5e1', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
+{`# Authenticate and submit order
+import requests
+
+token = requests.post(
+    'https://andromeda-channel-prod.auth.us-east-1.amazoncognito.com/oauth2/token',
+    data={'grant_type': 'client_credentials', ...}
+).json()['access_token']
+
+response = requests.post(
+    'https://api.v2.andromeda.channel/api/v1/orders',
+    headers={'Authorization': f'Bearer {token}'},
+    json={'order_number': 'demo_order_001', ...}
+)
+print(response.json()['lab_id'])`}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ 
+                background: theme.surface, 
+                padding: '3rem 2rem',
+                borderTop: `1px solid ${theme.border}`,
+                borderBottom: `1px solid ${theme.border}`
+              }}>
+                <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '3rem',
+                    textAlign: 'center'
+                  }}>
+                    {[
+                      { number: '99.99%', label: 'Uptime SLA', sublabel: 'Last 12 months' },
+                      { number: '<200ms', label: 'P95 Latency', sublabel: 'Global average' },
+                      { number: '50+', label: 'Lab Partners', sublabel: 'Across North America' },
+                      { number: '10M+', label: 'Orders/Month', sublabel: 'Processing volume' }
+                    ].map((stat, idx) => (
+                      <div key={idx}>
+                        <div style={{ fontSize: '3rem', fontWeight: '800', color: theme.primary, marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
+                          {stat.number}
+                        </div>
+                        <div style={{ fontSize: '1.125rem', fontWeight: '600', color: theme.text, marginBottom: '0.25rem' }}>
+                          {stat.label}
+                        </div>
+                        <div style={{ fontSize: '0.875rem', color: theme.textSecondary }}>
+                          {stat.sublabel}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ padding: '8rem 2rem', background: theme.background }}>
+                <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+                  <div style={{ maxWidth: '700px', marginBottom: '5rem' }}>
+                    <div style={{ 
+                      fontSize: '0.875rem', 
+                      fontWeight: '700', 
+                      color: theme.primary, 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.1em',
+                      marginBottom: '1rem'
+                    }}>
+                      Platform
+                    </div>
+                    <h2 style={{ 
+                      fontSize: '3rem', 
+                      fontWeight: '800', 
+                      marginBottom: '1.5rem', 
+                      color: theme.text,
+                      lineHeight: '1.2',
+                      letterSpacing: '-0.02em'
+                    }}>
+                      Built for modern healthcare infrastructure
+                    </h2>
+                    <p style={{ fontSize: '1.25rem', color: theme.textSecondary, lineHeight: '1.7' }}>
+                      Enterprise-grade APIs with intelligent workflow orchestration for reliability, security, and developer experience.
+                      Automate complex healthcare processes from eligibility to results.
+                    </p>
+                  </div>
+
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
+                    gap: '2rem'
+                  }}>
+                    {[
+                      { 
+                        icon: '⚡', 
+                        title: 'Fast Integration', 
+                        desc: 'Ship your first integration quickly. Simple required fields. No complex setup. Perfect for MVPs and cash-pay clinics.'
+                      },
+                      { 
+                        icon: '🔒', 
+                        title: 'Enterprise Security', 
+                        desc: 'OAuth 2.0 via AWS Cognito. HMAC webhook signatures. End-to-end encryption. HIPAA-compliant infrastructure. SOC 2 Type II certified.'
+                      },
+                      { 
+                        icon: '🔄', 
+                        title: 'Workflow Orchestration', 
+                        desc: 'Automated workflows handle complex multi-step processes. Retry logic, error handling, and state management built-in. Scale from simple routing to complex clinical workflows.'
+                      },
+                      { 
+                        icon: '✔', 
+                        title: 'Eligibility Verification', 
+                        desc: 'Real-time insurance eligibility checks through FHRC integration. Automated discovery and validation. Reduce claim denials before orders are placed.'
+                      },
+                      { 
+                        icon: '🌐', 
+                        title: 'FHIR Native', 
+                        desc: 'Built on HL7 FHIR R4 from day one. Future-proof your integrations. Seamless interoperability. Support for complex clinical workflows.'
+                      },
+                      { 
+                        icon: '📋', 
+                        title: 'Medical Necessity Checks', 
+                        desc: 'Automated medical necessity validation using diagnosis codes and test requirements. Flag potential issues before order submission. Improve authorization rates.'
+                      },
+                      { 
+                        icon: '📡', 
+                        title: 'Real-time Webhooks', 
+                        desc: 'Get results instantly via webhooks. Automatic retries with exponential backoff. Dead letter queues. Never miss a critical lab result.'
+                      },
+                      { 
+                        icon: '🗺️', 
+                        title: 'Intelligent Data Mapping', 
+                        desc: 'Configurable transformation rules for vendor-specific formats. Visual mapping tools for non-technical users. Handle edge cases without custom code.'
+                      },
+                      { 
+                        icon: '🔧', 
+                        title: 'Developer First', 
+                        desc: 'Comprehensive docs. Python and JavaScript examples. Postman collections. Sandbox environment. Responsive integration support.'
+                      },
+                      { 
+                        icon: '📊', 
+                        title: 'Smart Routing', 
+                        desc: 'Intelligent order routing across 50+ lab partners. Location-based. Test type optimization. Real-time capacity monitoring.'
+                      }
+                    ].map((feature, idx) => (
+                      <div key={idx} style={{
+                        padding: '2.5rem',
+                        borderRadius: '16px',
+                        background: theme.surface,
+                        border: `1px solid ${theme.border}`,
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.boxShadow = isDark 
+                          ? '0 20px 40px rgba(0, 0, 0, 0.4)' 
+                          : '0 20px 40px rgba(0, 0, 0, 0.08)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}>
+                        <div style={{ 
+                          fontSize: '3rem', 
+                          marginBottom: '1.5rem',
+                          filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.3))'
+                        }}>
+                          {feature.icon}
+                        </div>
+                        <h3 style={{ 
+                          fontSize: '1.5rem', 
+                          fontWeight: '700', 
+                          marginBottom: '1rem', 
+                          color: theme.text,
+                          letterSpacing: '-0.01em'
+                        }}>
+                          {feature.title}
+                        </h3>
+                        <p style={{ 
+                          color: theme.textSecondary, 
+                          lineHeight: '1.7',
+                          fontSize: '1rem'
+                        }}>
+                          {feature.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ 
+                padding: '8rem 2rem', 
+                background: isDark 
+                  ? 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)' 
+                  : 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+                borderTop: `1px solid ${theme.border}`,
+                borderBottom: `1px solid ${theme.border}`
+              }}>
+                <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+                  <div style={{ maxWidth: '700px', marginBottom: '5rem', textAlign: 'center', margin: '0 auto 5rem' }}>
+                    <div style={{ 
+                      fontSize: '0.875rem', 
+                      fontWeight: '700', 
+                      color: theme.primary, 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.1em',
+                      marginBottom: '1rem'
+                    }}>
+                      Workflow Engine
+                    </div>
+                    <h2 style={{ 
+                      fontSize: '3rem', 
+                      fontWeight: '800', 
+                      marginBottom: '1.5rem', 
+                      color: theme.text,
+                      lineHeight: '1.2',
+                      letterSpacing: '-0.02em'
+                    }}>
+                      More than just data routing
+                    </h2>
+                    <p style={{ fontSize: '1.25rem', color: theme.textSecondary, lineHeight: '1.7' }}>
+                      Our workflow orchestration engine handles complex multi-step processes that go beyond simple point-to-point integration. 
+                      Build reliable, fault-tolerant healthcare workflows without managing infrastructure.
+                    </p>
+                  </div>
+
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
+                    gap: '2rem'
+                  }}>
+                    {[
+                      {
+                        icon: '🔄',
+                        title: 'Workflow Orchestration',
+                        description: 'Complex multi-step processes with automatic state management',
+                        features: [
+                          'Automatic retry logic with exponential backoff',
+                          'Built-in error handling and dead letter queues',
+                          'Long-running workflows with persistent state',
+                          'Event-driven architecture for real-time processing'
+                        ]
+                      },
+                      {
+                        icon: '✔',
+                        title: 'Eligibility & Discovery',
+                        description: 'Real-time insurance verification through FHRC integration',
+                        features: [
+                          'Pre-submission eligibility checks',
+                          'Automated payer discovery and validation',
+                          'Reduce claim denials before order placement',
+                          'Coverage details and authorization requirements'
+                        ]
+                      },
+                      {
+                        icon: '📋',
+                        title: 'Medical Necessity',
+                        description: 'Automated validation of clinical appropriateness',
+                        features: [
+                          'ICD-10 to test requirement matching',
+                          'Flag potential authorization issues early',
+                          'Customizable rules per payer and test type',
+                          'Improve authorization approval rates'
+                        ]
+                      },
+                      {
+                        icon: '🗺️',
+                        title: 'Data Mapping & Transformation',
+                        description: 'Flexible transformation rules for any data format',
+                        features: [
+                          'Config-driven transformations (no code required)',
+                          'Visual mapping tools for business users',
+                          'Vendor-specific format handling',
+                          'FHIRPath queries for complex extractions'
+                        ]
+                      }
+                    ].map((workflow, idx) => (
+                      <div key={idx} style={{
+                        padding: '2.5rem',
+                        borderRadius: '16px',
+                        background: theme.surface,
+                        border: `1px solid ${theme.border}`,
+                        transition: 'all 0.3s ease'
+                      }}>
+                        <div style={{ 
+                          fontSize: '3rem', 
+                          marginBottom: '1.5rem',
+                          filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.3))'
+                        }}>
+                          {workflow.icon}
+                        </div>
+                        <h3 style={{ 
+                          fontSize: '1.5rem', 
+                          fontWeight: '700', 
+                          marginBottom: '0.75rem', 
+                          color: theme.text,
+                          letterSpacing: '-0.01em'
+                        }}>
+                          {workflow.title}
+                        </h3>
+                        <p style={{ 
+                          color: theme.textSecondary, 
+                          marginBottom: '1.5rem',
+                          fontSize: '1rem',
+                          lineHeight: '1.6'
+                        }}>
+                          {workflow.description}
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          {workflow.features.map((feature, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                              <div style={{ 
+                                minWidth: '6px',
+                                width: '6px', 
+                                height: '6px', 
+                                borderRadius: '50%', 
+                                background: theme.primary,
+                                marginTop: '0.5rem'
+                              }} />
+                              <span style={{ color: theme.text, fontSize: '0.9375rem', lineHeight: '1.6' }}>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{
+                    marginTop: '4rem',
+                    padding: '2.5rem',
+                    background: `${theme.primary}10`,
+                    border: `2px solid ${theme.primary}30`,
+                    borderRadius: '16px',
+                    textAlign: 'center'
+                  }}>
+                    <h3 style={{ 
+                      fontSize: '1.5rem', 
+                      fontWeight: '700', 
+                      color: theme.text,
+                      marginBottom: '1rem'
+                    }}>
+                      Build workflows that scale
+                    </h3>
+                    <p style={{ 
+                      fontSize: '1.125rem', 
+                      color: theme.textSecondary, 
+                      marginBottom: '2rem',
+                      maxWidth: '800px',
+                      margin: '0 auto 2rem',
+                      lineHeight: '1.7'
+                    }}>
+                      From simple order routing to complex clinical decision support, our workflow engine handles 
+                      the complexity so you can focus on your business logic.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setCurrentPage('docs');
+                        setApiView('overview');
+                      }}
+                      style={{
+                        padding: '1rem 2.5rem',
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        background: theme.primary,
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        boxShadow: `0 4px 16px ${theme.primary}40`
+                      }}
+                    >
+                      Explore API Documentation →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ 
+                padding: '8rem 2rem', 
+                background: theme.surface,
+                borderTop: `1px solid ${theme.border}`,
+                borderBottom: `1px solid ${theme.border}`
+              }}>
+                <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+                  <div style={{ maxWidth: '700px', marginBottom: '5rem' }}>
+                    <div style={{ 
+                      fontSize: '0.875rem', 
+                      fontWeight: '700', 
+                      color: theme.primary, 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.1em',
+                      marginBottom: '1rem'
+                    }}>
+                      Use Cases
+                    </div>
+                    <h2 style={{ 
+                      fontSize: '3rem', 
+                      fontWeight: '800', 
+                      color: theme.text,
+                      lineHeight: '1.2',
+                      letterSpacing: '-0.02em'
+                    }}>
+                      One platform, every healthcare setting
+                    </h2>
+                  </div>
+
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                    gap: '2rem'
+                  }}>
+                    {[
+                      { 
+                        icon: '💰', 
+                        title: 'Cash-Pay Clinics', 
+                        desc: 'Wellness centers, concierge medicine, DPC practices',
+                        features: ['Simple integration', 'No insurance complexity', 'Fast patient flow']
+                      },
+                      { 
+                        icon: '🏢', 
+                        title: 'Enterprise Hospitals', 
+                        desc: 'Multi-location health systems, academic medical centers',
+                        features: ['Full insurance billing', 'Complex workflows', 'Audit & compliance']
+                      },
+                      { 
+                        icon: '🔬', 
+                        title: 'Lab Networks', 
+                        desc: 'Reference labs, diagnostic centers, pathology groups',
+                        features: ['High-volume routing', 'Multi-partner integration', 'Real-time capacity']
+                      }
+                    ].map((useCase, idx) => (
+                      <div key={idx} style={{
+                        padding: '3rem',
+                        borderRadius: '16px',
+                        background: theme.background,
+                        border: `1px solid ${theme.border}`
+                      }}>
+                        <div style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>{useCase.icon}</div>
+                        <h3 style={{ 
+                          fontSize: '1.75rem', 
+                          fontWeight: '700', 
+                          marginBottom: '0.75rem', 
+                          color: theme.text 
+                        }}>
+                          {useCase.title}
+                        </h3>
+                        <p style={{ 
+                          color: theme.textSecondary, 
+                          marginBottom: '2rem',
+                          fontSize: '1.125rem',
+                          lineHeight: '1.6'
+                        }}>
+                          {useCase.desc}
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          {useCase.features.map((feature, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                              <div style={{ 
+                                width: '6px', 
+                                height: '6px', 
+                                borderRadius: '50%', 
+                                background: theme.primary 
+                              }} />
+                              <span style={{ color: theme.textSecondary }}>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                padding: '8rem 2rem',
+                background: isDark 
+                  ? 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)' 
+                  : 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: `radial-gradient(circle at 50% 50%, ${theme.primary}15, transparent 70%)`
+                }} />
+                
+                <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                  <h2 style={{ 
+                    fontSize: '3.5rem', 
+                    fontWeight: '800', 
+                    marginBottom: '1.5rem',
+                    color: theme.text,
+                    lineHeight: '1.2',
+                    letterSpacing: '-0.02em'
+                  }}>
+                    Ready to transform your
+                    <br />lab integrations?
+                  </h2>
+                  <p style={{ 
+                    fontSize: '1.375rem', 
+                    marginBottom: '3rem',
+                    color: theme.textSecondary,
+                    lineHeight: '1.7'
+                  }}>
+                    Join healthcare organizations shipping faster with Andromeda
+                  </p>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <button 
+                      onClick={() => setCurrentPage('login')}
+                      style={{
+                        padding: '1.25rem 3rem',
+                        fontSize: '1.125rem',
+                        fontWeight: '600',
+                        background: theme.primary,
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        boxShadow: `0 4px 20px ${theme.primary}40`
+                      }}>
+                      Get Started
+                    </button>
+                    <button 
+                      onClick={() => window.location.href = 'mailto:support@andromeda.channel'}
+                      style={{
+                        padding: '1.25rem 3rem',
+                        fontSize: '1.125rem',
+                        fontWeight: '600',
+                        background: 'transparent',
+                        color: theme.text,
+                        border: `2px solid ${theme.border}`,
+                        borderRadius: '8px',
+                        cursor: 'pointer'
+                      }}>
+                      Contact Support
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          );
+
+          const ApiDocsPage = () => {
+            if (apiView === 'overview') {
+              return (
+                <div style={{ background: theme.background, minHeight: 'calc(100vh - 200px)' }}>
+                  <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem' }}>
+                    <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
+                      <h1 style={{ 
+                        fontSize: '3rem', 
+                        fontWeight: '800', 
+                        marginBottom: '1rem',
+                        color: theme.text,
+                        letterSpacing: '-0.02em'
+                      }}>
+                        Andromeda Channel API
+                      </h1>
+                      <p style={{ fontSize: '1.25rem', color: theme.textSecondary, lineHeight: '1.7', maxWidth: '700px', margin: '0 auto' }}>
+                        Choose the API that best fits your integration needs
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+                      {/* REST API Card */}
+                      <div style={{
+                        padding: '3rem',
+                        background: theme.surface,
+                        border: `2px solid ${theme.primary}`,
+                        borderRadius: '16px',
+                        position: 'relative'
+                      }}>
+                        <div style={{
+                          position: 'absolute',
+                          top: '1.5rem',
+                          right: '1.5rem',
+                          padding: '0.375rem 0.875rem',
+                          background: theme.primary,
+                          color: 'white',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: '700',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em'
+                        }}>
+                          Available Now
+                        </div>
+
+                        <h2 style={{ 
+                          fontSize: '2rem', 
+                          fontWeight: '700', 
+                          marginBottom: '1rem',
+                          color: theme.text
+                        }}>
+                          REST API
+                        </h2>
+                        
+                        <p style={{ 
+                          fontSize: '1.125rem', 
+                          color: theme.textSecondary, 
+                          lineHeight: '1.7',
+                          marginBottom: '2rem'
+                        }}>
+                          Our modern REST API provides a streamlined JSON interface for lab order placement and result delivery. Designed for rapid integration with minimal overhead.
+                        </p>
+
+                        <div style={{ marginBottom: '2rem' }}>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.text,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Best For
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {[
+                              'EMR/EHR systems seeking quick integration',
+                              'Cash-pay and direct-to-consumer lab workflows',
+                              'Partners who prefer a simplified data model'
+                            ].map((item, idx) => (
+                              <div key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                <span style={{ color: theme.primary, fontWeight: '700', fontSize: '1.25rem', lineHeight: '1.5' }}>•</span>
+                                <span style={{ color: theme.text, fontSize: '1rem', lineHeight: '1.5' }}>{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div style={{ marginBottom: '2.5rem' }}>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.text,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Features
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {[
+                              'OAuth 2.0 authentication via AWS Cognito',
+                              'Simple JSON request/response format',
+                              'Webhook-based result delivery with HMAC signature verification',
+                              'Comprehensive error handling and retry logic'
+                            ].map((item, idx) => (
+                              <div key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                <span style={{ color: theme.primary, fontWeight: '700', fontSize: '1.25rem', lineHeight: '1.5' }}>•</span>
+                                <span style={{ color: theme.text, fontSize: '1rem', lineHeight: '1.5' }}>{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => setApiView('rest')}
+                          style={{
+                            padding: '1rem 2rem',
+                            background: theme.primary,
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '1rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem'
+                          }}
+                        >
+                          View REST API Documentation →
+                        </button>
+                      </div>
+
+                      {/* FHIR API Card */}
+                      <div style={{
+                        padding: '3rem',
+                        background: theme.surface,
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '16px',
+                        position: 'relative',
+                        opacity: 0.85
+                      }}>
+                        <div style={{
+                          position: 'absolute',
+                          top: '1.5rem',
+                          right: '1.5rem',
+                          padding: '0.375rem 0.875rem',
+                          background: theme.textSecondary,
+                          color: theme.surface,
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: '700',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em'
+                        }}>
+                          Coming Soon
+                        </div>
+
+                        <h2 style={{ 
+                          fontSize: '2rem', 
+                          fontWeight: '700', 
+                          marginBottom: '1rem',
+                          color: theme.text
+                        }}>
+                          FHIR API
+                        </h2>
+                        
+                        <p style={{ 
+                          fontSize: '1.125rem', 
+                          color: theme.textSecondary, 
+                          lineHeight: '1.7',
+                          marginBottom: '2rem'
+                        }}>
+                          Standards-based FHIR R4 API for healthcare systems that require full HL7 FHIR compatibility.
+                        </p>
+
+                        <div style={{ marginBottom: '2rem' }}>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.text,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Best For
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {[
+                              'Enterprise healthcare systems',
+                              'Organizations with existing FHIR infrastructure',
+                              'Multi-vendor integrations requiring standardized formats'
+                            ].map((item, idx) => (
+                              <div key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                <span style={{ color: theme.textSecondary, fontWeight: '700', fontSize: '1.25rem', lineHeight: '1.5' }}>•</span>
+                                <span style={{ color: theme.text, fontSize: '1rem', lineHeight: '1.5' }}>{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div style={{ marginBottom: '2.5rem' }}>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.text,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Features
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {[
+                              'Native FHIR R4 ServiceRequest and DiagnosticReport resources',
+                              'Full compliance with US Core Implementation Guide',
+                              'OAuth 2.0 SMART-on-FHIR authentication'
+                            ].map((item, idx) => (
+                              <div key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                                <span style={{ color: theme.textSecondary, fontWeight: '700', fontSize: '1.25rem', lineHeight: '1.5' }}>•</span>
+                                <span style={{ color: theme.text, fontSize: '1rem', lineHeight: '1.5' }}>{item}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <a
+                          href="mailto:support@andromeda.channel?subject=FHIR API Early Access"
+                          style={{
+                            padding: '1rem 2rem',
+                            background: 'transparent',
+                            color: theme.text,
+                            border: `2px solid ${theme.border}`,
+                            borderRadius: '8px',
+                            fontSize: '1rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            width: '100%',
+                            textDecoration: 'none',
+                            display: 'block',
+                            textAlign: 'center'
+                          }}
+                        >
+                          Contact Us for Early Access
+                        </a>
+                      </div>
+                    </div>
+
+                    <div style={{
+                      padding: '2rem',
+                      background: `${theme.primary}10`,
+                      border: `1px solid ${theme.primary}30`,
+                      borderRadius: '12px',
+                      textAlign: 'center'
+                    }}>
+                      <p style={{ color: theme.text, fontSize: '1rem', marginBottom: '1rem' }}>
+                        <strong>Need help choosing?</strong> Our team can help you select the right API for your integration needs.
+                      </p>
+                      <a 
+                        href="mailto:support@andromeda.channel?subject=API Integration Consultation" 
+                        style={{
+                          display: 'inline-block',
+                          padding: '0.75rem 1.5rem',
+                          background: theme.primary,
+                          color: 'white',
+                          textDecoration: 'none',
+                          borderRadius: '8px',
+                          fontWeight: '600',
+                          fontSize: '0.9375rem'
+                        }}
+                      >
+                        Contact Support
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // REST API Documentation - COMPLETE COPY FROM TSX
+            const endpoints = {
+              authentication: {
+                title: 'Authentication',
+                description: 'OAuth 2.0 Client Credentials Flow via AWS Cognito',
+                sections: [
+                  {
+                    title: 'Token Request',
+                    method: 'POST',
+                    path: 'https://andromeda-channel-prod.auth.us-east-1.amazoncognito.com/oauth2/token',
+                    requestBody: `Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&client_id=YOUR_CLIENT_ID
+&client_secret=YOUR_CLIENT_SECRET`,
+                    response: `{
+  "access_token": "eyJraWQiOiJ...",
+  "expires_in": 3600,
+  "token_type": "Bearer"
+}`,
+                    notes: [
+                      'Tokens expire after 1 hour (3600 seconds)',
+                      'Cache and reuse tokens - don\'t request per API call',
+                      'Refresh proactively 5 minutes before expiry',
+                      'Development: andromeda-channel-dev.auth.us-east-1.amazoncognito.com',
+                      'Production: andromeda-channel-prod.auth.us-east-1.amazoncognito.com'
+                    ]
+                  }
+                ]
+              },
+              orders: {
+                title: 'Orders',
+                description: 'Create and manage laboratory orders with patient demographics and test codes',
+                sections: [
+                  {
+                    title: 'Create Order',
+                    method: 'POST',
+                    path: 'https://api.v2.andromeda.channel/api/v1/orders',
+                    requestBody: `{
+  "order_number": "demo_order_001",
+  "account": "demo_clinic_account",
+  "control_id": "20251027140500ABC123",
+  "placed_by": "Dr. Sarah Johnson",
+  "originating_requisition": "REQ-DEMO-2025-001",
+  "physician": {
+    "first_name": "JOHN",
+    "last_name": "DOE",
+    "npi": "1234567893"
+  },
+  "patient": {
+    "external_code": "patient_demo_123",
+    "internal_pid": "PID-DEMO-12345",
+    "first_name": "JANE",
+    "middle_name": "M",
+    "last_name": "SMITH",
+    "gender": "Female",
+    "email": "jane.smith@example.com",
+    "phone": "15555551234",
+    "date_of_birth": "01/15/1985",
+    "ssn": "000-00-0000",
+    "race": "White",
+    "ethnicity": "Not Hispanic or Latino",
+    "bill_type": "I",
+    "address": {
+      "line_1": "123 Main Street",
+      "line_2": "Apt 4B",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62701",
+      "country": "US"
+    },
+    "guarantor": {
+      "first_name": "JANE",
+      "last_name": "SMITH",
+      "date_of_birth": "19850115",
+      "gender": "F",
+      "relationship": "self",
+      "phone": "15555551234"
+    }
+  },
+  "insurance": [
+    {
+      "sequence": 1,
+      "payer_code": "DEMO_INS",
+      "payer_name": "Demo Insurance Company",
+      "policy_number": "DEMO123456789",
+      "group_number": "GRP001",
+      "bill_type": "I"
+    }
+  ],
+  "diagnosis_codes": [
+    {
+      "system": "ICD-10-CM",
+      "code": "D50.9",
+      "description": "Iron deficiency anemia, unspecified"
+    },
+    {
+      "system": "ICD-10-CM",
+      "code": "E78.2",
+      "description": "Mixed hyperlipidemia"
+    }
+  ],
+  "tests": [
+    {
+      "order_code": "420002",
+      "order_name": "CBCw Diff",
+      "specimen_type": "whole blood",
+      "collection_date": "20251027140000",
+      "category": "Hematology",
+      "diagnosis_codes": [
+        {
+          "system": "ICD-10-CM",
+          "code": "D50.9",
+          "description": "Iron deficiency anemia"
+        }
+      ]
+    },
+    {
+      "order_code": "410010",
+      "order_name": "CMP",
+      "specimen_type": "serum",
+      "collection_date": "20251027140000",
+      "category": "Chemistry"
+    }
+  ],
+  "order_codes": ["420002", "410010"],
+  "comments": [
+    "Patient fasting since midnight",
+    "Priority: Routine"
+  ]
+}`,
+                    response: `{
+  "lab_id": "abc12345-6789-0def-ghij-klmnopqrstuv",
+  "requisition_pdf": "data:application/pdf;base64,JVBERi0xLjQKJeLjz9MK..."
+}`,
+                    notes: [
+                      'order_number serves as idempotency key (7-day window)',
+                      'Duplicate order_number returns 409 with existing lab_id',
+                      'Minimum required fields for quick integration available',
+                      'Full production fields include insurance, diagnosis codes, guarantor',
+                      'All examples use demo/test data - replace with real values in production'
+                    ]
+                  }
+                ],
+                fields: [
+                  { section: 'Root Level', name: 'order_number', type: 'string', required: 'Yes', desc: 'Unique order identifier (idempotency key)' },
+                  { section: 'Root Level', name: 'account', type: 'string', required: 'Yes', desc: 'Lab account identifier' },
+                  { section: 'Root Level', name: 'control_id', type: 'string', required: 'No', desc: 'EMR control/transaction ID for tracking' },
+                  { section: 'Root Level', name: 'placed_by', type: 'string', required: 'No', desc: 'Name of user who placed order' },
+                  { section: 'Root Level', name: 'customer_trace_number', type: 'string', required: 'No', desc: 'Internal tracking number' },
+                  { section: 'Root Level', name: 'originating_requisition', type: 'string', required: 'No', desc: 'Original requisition identifier' },
+                  { section: 'Root Level', name: 'physician', type: 'object', required: 'Yes', desc: 'Ordering physician information' },
+                  { section: 'Root Level', name: 'patient', type: 'object', required: 'Yes', desc: 'Patient demographics' },
+                  { section: 'Root Level', name: 'order_codes', type: 'array', required: 'Yes', desc: 'Lab test codes (minimum 1)' },
+                  { section: 'Root Level', name: 'tests', type: 'array', required: 'No', desc: 'Detailed per-test metadata' },
+                  { section: 'Root Level', name: 'comments', type: 'array', required: 'No', desc: 'Order-level comments' },
+                  { section: 'Root Level', name: 'insurance', type: 'array', required: 'No', desc: 'Patient insurance (billing)' },
+                  { section: 'Root Level', name: 'diagnosis_codes', type: 'array', required: 'No', desc: 'ICD-10 codes (billing)' },
+                  { section: 'Physician', name: 'first_name', type: 'string', required: 'Yes', desc: 'Provider first name' },
+                  { section: 'Physician', name: 'last_name', type: 'string', required: 'Yes', desc: 'Provider last name' },
+                  { section: 'Physician', name: 'npi', type: 'string', required: 'Yes', desc: '10-digit National Provider Identifier' },
+                  { section: 'Patient', name: 'external_code', type: 'string', required: 'Yes', desc: 'Your patient identifier' },
+                  { section: 'Patient', name: 'internal_pid', type: 'string', required: 'No', desc: 'Lab internal patient ID (if pre-registered)' },
+                  { section: 'Patient', name: 'first_name', type: 'string', required: 'Yes', desc: 'Patient first name' },
+                  { section: 'Patient', name: 'middle_name', type: 'string', required: 'No', desc: 'Patient middle name' },
+                  { section: 'Patient', name: 'last_name', type: 'string', required: 'Yes', desc: 'Patient last name' },
+                  { section: 'Patient', name: 'gender', type: 'string', required: 'Yes', desc: 'Male, Female, Other, Unknown' },
+                  { section: 'Patient', name: 'email', type: 'string', required: 'No', desc: 'Patient email address' },
+                  { section: 'Patient', name: 'phone', type: 'string', required: 'Yes', desc: '10-11 digit phone number' },
+                  { section: 'Patient', name: 'date_of_birth', type: 'string', required: 'Yes', desc: 'Format: MM/DD/YYYY' },
+                  { section: 'Patient', name: 'ssn', type: 'string', required: 'No', desc: 'Social Security Number (billing)' },
+                  { section: 'Patient', name: 'drivers_license', type: 'string', required: 'No', desc: 'Driver\'s license number' },
+                  { section: 'Patient', name: 'race', type: 'string', required: 'No', desc: 'Patient race (compliance reporting)' },
+                  { section: 'Patient', name: 'ethnicity', type: 'string', required: 'No', desc: 'Patient ethnicity (compliance)' },
+                  { section: 'Patient', name: 'address', type: 'object', required: 'Yes', desc: 'Patient address' },
+                  { section: 'Patient', name: 'bill_type', type: 'string', required: 'No', desc: 'I (Insurance), C (Cash), P (Patient)' },
+                  { section: 'Patient', name: 'guarantor', type: 'object', required: 'No', desc: 'Financially responsible party' },
+                  { section: 'Address', name: 'line_1', type: 'string', required: 'Yes', desc: 'Street address line 1' },
+                  { section: 'Address', name: 'line_2', type: 'string', required: 'No', desc: 'Apt/suite number' },
+                  { section: 'Address', name: 'city', type: 'string', required: 'Yes', desc: 'City name' },
+                  { section: 'Address', name: 'state', type: 'string', required: 'Yes', desc: '2-letter code or full name' },
+                  { section: 'Address', name: 'zip', type: 'string', required: 'Yes', desc: '5 or 9 digit ZIP code' },
+                  { section: 'Address', name: 'country', type: 'string', required: 'Yes', desc: '2-letter ISO code (US)' },
+                  { section: 'Guarantor', name: 'first_name', type: 'string', required: 'Yes*', desc: 'Guarantor first name (*if guarantor provided)' },
+                  { section: 'Guarantor', name: 'last_name', type: 'string', required: 'Yes*', desc: 'Guarantor last name' },
+                  { section: 'Guarantor', name: 'date_of_birth', type: 'string', required: 'Yes*', desc: 'YYYYMMDD or MM/DD/YYYY' },
+                  { section: 'Guarantor', name: 'gender', type: 'string', required: 'Yes*', desc: 'Guarantor gender' },
+                  { section: 'Guarantor', name: 'relationship', type: 'string', required: 'Yes*', desc: 'self, spouse, parent' },
+                  { section: 'Guarantor', name: 'phone', type: 'string', required: 'Yes*', desc: 'Guarantor phone number' },
+                  { section: 'Insurance', name: 'sequence', type: 'integer', required: 'Yes*', desc: '1=primary, 2=secondary, 3=tertiary' },
+                  { section: 'Insurance', name: 'payer_code', type: 'string', required: 'Yes*', desc: 'Insurance company code' },
+                  { section: 'Insurance', name: 'payer_name', type: 'string', required: 'Yes*', desc: 'Insurance company name' },
+                  { section: 'Insurance', name: 'policy_number', type: 'string', required: 'Yes*', desc: 'Policy/member ID' },
+                  { section: 'Insurance', name: 'group_number', type: 'string', required: 'No', desc: 'Group number' },
+                  { section: 'Insurance', name: 'bill_type', type: 'string', required: 'No', desc: 'Bill type for this payer' },
+                  { section: 'Insurance', name: 'payer_class', type: 'string', required: 'No', desc: 'Commercial, Medicare, Medicaid' },
+                  { section: 'Diagnosis', name: 'system', type: 'string', required: 'Yes*', desc: 'Coding system (ICD-10-CM)' },
+                  { section: 'Diagnosis', name: 'code', type: 'string', required: 'Yes*', desc: 'Diagnosis code' },
+                  { section: 'Diagnosis', name: 'description', type: 'string', required: 'No', desc: 'Human-readable description' },
+                  { section: 'Tests', name: 'order_code', type: 'string', required: 'Yes*', desc: 'Lab test code' },
+                  { section: 'Tests', name: 'order_name', type: 'string', required: 'No', desc: 'Human-readable test name' },
+                  { section: 'Tests', name: 'specimen_type', type: 'string', required: 'No', desc: 'whole blood, serum, urine' },
+                  { section: 'Tests', name: 'container', type: 'string', required: 'No', desc: 'Collection container type' },
+                  { section: 'Tests', name: 'collection_date', type: 'string', required: 'No', desc: 'YYYYMMDD or ISO format' },
+                  { section: 'Tests', name: 'category', type: 'string', required: 'No', desc: 'Hematology, Chemistry, etc.' },
+                  { section: 'Tests', name: 'diagnosis_codes', type: 'array', required: 'No', desc: 'Test-specific diagnosis codes' },
+                  { section: 'Tests', name: 'notes', type: 'string', required: 'No', desc: 'Test-specific notes' }
+                ]
+              },
+              results: {
+                title: 'Results',
+                description: 'Retrieve laboratory test results with complete metadata and PDF reports',
+                sections: [
+                  {
+                    title: 'Get Results',
+                    method: 'GET',
+                    path: 'https://api.v2.andromeda.channel/api/v1/results/{order_id}',
+                    response: `{
+  "lab_id": "abc12345-6789-0def-ghij-klmnopqrstuv",
+  "account": "test_account_001",
+  "accession_number": "LAB2025001234",
+  "control_id": "CTRL20251027001",
+  "reported_date": "20251027140500",
+  "patient": {
+    "first_name": "JOHN",
+    "middle_name": "Q",
+    "last_name": "TESTPATIENT",
+    "date_of_birth": "01/01/1980",
+    "gender": "Male",
+    "phone": "5555551234",
+    "email": "test.patient@example.com",
+    "external_code": "test_patient_999",
+    "address": {
+      "line_1": "123 Test Street",
+      "line_2": "Apt 4B",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62701",
+      "country": "US"
+    }
+  },
+  "provider": {
+    "npi": "9999999999",
+    "first_name": "JANE",
+    "last_name": "PROVIDER"
+  },
+  "data": [
+    {
+      "analyte_id": "420005",
+      "analyte_name": "WBC",
+      "date_analyzed": "20251027142826",
+      "result": "4.51",
+      "unit": "10e3/uL",
+      "test_range": {
+        "low": "3.68",
+        "high": "12.2"
+      },
+      "flags": "N",
+      "status": "F"
+    },
+    {
+      "analyte_id": "420010",
+      "analyte_name": "RBC",
+      "date_analyzed": "20251027142826",
+      "result": "3.41",
+      "unit": "10e6/uL",
+      "test_range": {
+        "low": "3.78",
+        "high": "5.34"
+      },
+      "flags": "L",
+      "status": "F",
+      "comment": "Slightly below normal range"
+    },
+    {
+      "analyte_id": "420015",
+      "analyte_name": "HGB",
+      "date_analyzed": "20251027142826",
+      "result": "14.2",
+      "unit": "g/dL",
+      "test_range": {
+        "low": "13.5",
+        "high": "17.5"
+      },
+      "flags": "N",
+      "status": "F"
+    }
+  ],
+  "notes": [
+    {
+      "sequence": 1,
+      "note": "Sample processed using automated analyzer"
+    },
+    {
+      "sequence": 2,
+      "note": "Results reviewed and approved by medical director"
+    }
+  ],
+  "results_pdf": "data:application/pdf;base64,JVBERi0xLjUKJeLjz9MKMyAwIG9iago..."
+}`,
+                    notes: [
+                      'Results include patient demographics and provider information',
+                      'data array contains all individual analyte results',
+                      'Flags: H (High), L (Low), N (Normal), A (Abnormal)',
+                      'Status: P (Preliminary), F (Final), C (Corrected), X (Cancelled)',
+                      'PDF report included as base64-encoded data URI',
+                      'All examples use demo/test data - replace with real values in production'
+                    ]
+                  }
+                ],
+                fields: [
+                  { section: 'Root Level', name: 'lab_id', type: 'string', required: 'Yes', desc: 'Andromeda order identifier' },
+                  { section: 'Root Level', name: 'account', type: 'string', required: 'Yes', desc: 'Lab account identifier' },
+                  { section: 'Root Level', name: 'accession_number', type: 'string', required: 'No', desc: 'Lab internal tracking number' },
+                  { section: 'Root Level', name: 'control_id', type: 'string', required: 'No', desc: 'Lab control/batch ID' },
+                  { section: 'Root Level', name: 'reported_date', type: 'string', required: 'No', desc: 'Results reported timestamp (YYYYMMDD)' },
+                  { section: 'Root Level', name: 'patient', type: 'object', required: 'No', desc: 'Patient demographic information' },
+                  { section: 'Root Level', name: 'provider', type: 'object', required: 'No', desc: 'Ordering provider details' },
+                  { section: 'Root Level', name: 'data', type: 'array', required: 'Yes', desc: 'Individual analyte results (1+)' },
+                  { section: 'Root Level', name: 'results_pdf', type: 'string', required: 'Yes', desc: 'Base64-encoded PDF report' },
+                  { section: 'Root Level', name: 'notes', type: 'array', required: 'No', desc: 'Structured result notes' },
+                  { section: 'Patient', name: 'first_name', type: 'string', required: 'Yes*', desc: 'Patient first name' },
+                  { section: 'Patient', name: 'middle_name', type: 'string', required: 'No', desc: 'Patient middle name' },
+                  { section: 'Patient', name: 'last_name', type: 'string', required: 'Yes*', desc: 'Patient last name' },
+                  { section: 'Patient', name: 'date_of_birth', type: 'string', required: 'Yes*', desc: 'Patient DOB (MM/DD/YYYY)' },
+                  { section: 'Patient', name: 'gender', type: 'string', required: 'Yes*', desc: 'Patient gender' },
+                  { section: 'Patient', name: 'phone', type: 'string', required: 'No', desc: 'Patient phone number' },
+                  { section: 'Patient', name: 'email', type: 'string', required: 'No', desc: 'Patient email' },
+                  { section: 'Patient', name: 'external_code', type: 'string', required: 'No', desc: 'External patient identifier' },
+                  { section: 'Patient', name: 'address', type: 'object', required: 'No', desc: 'Patient address' },
+                  { section: 'Provider', name: 'npi', type: 'string', required: 'Yes*', desc: 'Provider NPI' },
+                  { section: 'Provider', name: 'first_name', type: 'string', required: 'Yes*', desc: 'Provider first name' },
+                  { section: 'Provider', name: 'last_name', type: 'string', required: 'Yes*', desc: 'Provider last name' },
+                  { section: 'Analyte', name: 'analyte_id', type: 'string', required: 'Yes', desc: 'Lab-specific test code' },
+                  { section: 'Analyte', name: 'analyte_name', type: 'string', required: 'Yes', desc: 'Human-readable test name' },
+                  { section: 'Analyte', name: 'date_analyzed', type: 'string', required: 'Yes', desc: 'Result timestamp (YYYYMMDD HH:MM:SS)' },
+                  { section: 'Analyte', name: 'result', type: 'string', required: 'Yes', desc: 'Test result value' },
+                  { section: 'Analyte', name: 'unit', type: 'string', required: 'No', desc: 'Unit of measure (g/dL, mg/dL, etc)' },
+                  { section: 'Analyte', name: 'flags', type: 'string', required: 'No', desc: 'H, L, N, A, or empty' },
+                  { section: 'Analyte', name: 'status', type: 'string', required: 'No', desc: 'P, F, C, or X' },
+                  { section: 'Analyte', name: 'comment', type: 'string', required: 'No', desc: 'Result-specific comment' },
+                  { section: 'Analyte', name: 'test_range', type: 'object', required: 'No', desc: 'Reference range (low/high)' },
+                  { section: 'Test Range', name: 'low', type: 'string', required: 'No', desc: 'Lower bound of normal range' },
+                  { section: 'Test Range', name: 'high', type: 'string', required: 'No', desc: 'Upper bound of normal range' },
+                  { section: 'Address', name: 'line_1', type: 'string', required: 'Yes*', desc: 'Street address' },
+                  { section: 'Address', name: 'line_2', type: 'string', required: 'No', desc: 'Apartment/suite' },
+                  { section: 'Address', name: 'city', type: 'string', required: 'Yes*', desc: 'City' },
+                  { section: 'Address', name: 'state', type: 'string', required: 'Yes*', desc: 'State code' },
+                  { section: 'Address', name: 'zip', type: 'string', required: 'Yes*', desc: 'ZIP code' },
+                  { section: 'Address', name: 'country', type: 'string', required: 'Yes*', desc: 'Country code' },
+                  { section: 'Notes', name: 'sequence', type: 'integer', required: 'Yes*', desc: 'Display order' },
+                  { section: 'Notes', name: 'note', type: 'string', required: 'Yes*', desc: 'Note text' }
+                ]
+              },
+              webhooks: {
+                title: 'Webhooks',
+                description: 'Real-time result notifications with HMAC signature verification',
+                sections: [
+                  {
+                    title: 'Webhook Delivery',
+                    method: 'POST',
+                    path: 'https://your-endpoint.com/webhooks',
+                    requestBody: `Headers:
+X-Andromeda-Signature: sha256=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
+X-Andromeda-Timestamp: 1730041805
+Content-Type: application/json
+
+Body:
+{
+  "lab_id": "abc12345-6789-0def-ghij-klmnopqrstuv",
+  "account": "test_account_001",
+  "data": [
+    {
+      "analyte_id": "420005",
+      "analyte_name": "WBC",
+      "date_analyzed": "2025-10-27 16:30:00",
+      "result": "4.51",
+      "unit": "10e3/uL",
+      "flags": "N",
+      "test_range": {"low": "3.68", "high": "12.2"}
+    },
+    {
+      "analyte_id": "420015",
+      "analyte_name": "HGB",
+      "date_analyzed": "2025-10-27 16:30:00",
+      "result": "14.2",
+      "unit": "g/dL",
+      "flags": "N",
+      "test_range": {"low": "13.5", "high": "17.5"}
+    }
+  ],
+  "results_pdf": "data:application/pdf;base64,JVBERi0xLjUKJeLjz9MK..."
+}`,
+                    response: `{
+  "status": "received",
+  "message_id": "msg_demo_abc123xyz789",
+  "timestamp": "2025-10-27T16:30:05Z"
+}`,
+                    notes: [
+                      'HMAC-SHA256 signature with 5-minute timestamp tolerance',
+                      'Retry schedule: immediate, 1min, 5min, 15min, 1hr, 4hr',
+                      'Retries triggered by 5xx, timeouts, connection failures',
+                      'No retry for 4xx (client error) or 2xx (success)',
+                      'After 6 failures: dead letter queue + support notification'
+                    ]
+                  }
+                ]
+              },
+              errors: {
+                title: 'Error Handling',
+                description: 'Common error codes, responses, and troubleshooting',
+                sections: [
+                  {
+                    title: '400 Bad Request',
+                    method: 'ERROR',
+                    path: 'Validation Error',
+                    response: `{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid request data",
+    "details": [{
+      "field": "patient.date_of_birth",
+      "message": "Invalid date format. Expected MM/DD/YYYY"
+    }]
+  }
+}`
+                  },
+                  {
+                    title: '401 Unauthorized',
+                    method: 'ERROR',
+                    path: 'Invalid or Expired Token',
+                    response: `{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Invalid or expired access token"
+  }
+}`
+                  },
+                  {
+                    title: '409 Conflict',
+                    method: 'ERROR',
+                    path: 'Duplicate Order',
+                    response: `{
+  "error": {
+    "code": "DUPLICATE_ORDER",
+    "message": "Order 'demo_order_001' already exists",
+    "existing_lab_id": "abc12345-6789-0def-ghij-klmnopqrstuv"
+  }
+}`
+                  },
+                  {
+                    title: '422 Unprocessable Entity',
+                    method: 'ERROR',
+                    path: 'Business Rule Violation',
+                    response: `{
+  "error": {
+    "code": "INVALID_ORDER_CODE",
+    "message": "Order code '9999' not found in lab catalog"
+  }
+}`
+                  }
+                ],
+                notes: [
+                  'VALIDATION_ERROR (400): Review error details and fix request',
+                  'UNAUTHORIZED (401): Refresh access token',
+                  'DUPLICATE_ORDER (409): Use existing lab_id or new order_number',
+                  'INVALID_ORDER_CODE (422): Verify test code with support',
+                  'INVALID_NPI (422): Check provider NPI format and checksum',
+                  'INTERNAL_ERROR (500): Retry or contact support',
+                  'SERVICE_UNAVAILABLE (503): Retry with exponential backoff'
+                ]
+              }
+            };
+
+            const current = endpoints[selectedEndpoint];
+            const groupedFields = current.fields ? current.fields.reduce((acc, field) => {
+              if (!acc[field.section]) acc[field.section] = [];
+              acc[field.section].push(field);
+              return acc;
+            }, {}) : {};
+
+            return (
+              <div style={{ background: theme.background, minHeight: 'calc(100vh - 200px)' }}>
+                <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '4rem 2rem' }}>
+                  <div style={{ marginBottom: '2rem' }}>
+                    <button
+                      onClick={() => setApiView('overview')}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        background: 'transparent',
+                        color: theme.primary,
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '6px',
+                        fontSize: '0.9375rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        marginBottom: '2rem'
+                      }}
+                    >
+                      ← Back to API Overview
+                    </button>
+                    
+                    <h1 style={{ 
+                      fontSize: '3rem', 
+                      fontWeight: '800', 
+                      marginBottom: '1rem',
+                      color: theme.text,
+                      letterSpacing: '-0.02em'
+                    }}>
+                      REST API Reference
+                    </h1>
+                    <p style={{ fontSize: '1.25rem', color: theme.textSecondary, lineHeight: '1.7' }}>
+                      Complete REST API documentation for the Andromeda Platform
+                    </p>
+                    <div style={{ 
+                      marginTop: '1.5rem',
+                      padding: '1rem 1.5rem',
+                      background: `${theme.primary}15`,
+                      border: `1px solid ${theme.primary}30`,
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem'
+                    }}>
+                      <span style={{ fontSize: '1.25rem' }}>💡</span>
+                      <div style={{ fontSize: '0.9375rem', color: theme.text }}>
+                        <strong>Need help?</strong> Contact{' '}
+                        <a href="mailto:support@andromeda.channel" style={{ color: theme.primary, textDecoration: 'none', fontWeight: '600' }}>
+                          support@andromeda.channel
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '250px 1fr', gap: '3rem' }}>
+                    <div>
+                      <div style={{ position: 'sticky', top: '100px' }}>
+                        <div style={{ marginBottom: '2rem' }}>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.textSecondary,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Getting Started
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <button
+                              onClick={() => setSelectedEndpoint('authentication')}
+                              style={{ 
+                                color: selectedEndpoint === 'authentication' ? theme.primary : theme.textSecondary,
+                                background: selectedEndpoint === 'authentication' ? `${theme.primary}15` : 'transparent',
+                                fontSize: '0.9375rem',
+                                padding: '0.5rem',
+                                borderRadius: '6px',
+                                border: 'none',
+                                textAlign: 'left',
+                                cursor: 'pointer',
+                                fontWeight: selectedEndpoint === 'authentication' ? '600' : '400'
+                              }}
+                            >
+                              Authentication
+                            </button>
+                          </div>
+                        </div>
+
+                        <div style={{ marginBottom: '2rem' }}>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.textSecondary,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Endpoints
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            {['orders', 'results', 'webhooks'].map(key => (
+                              <button
+                                key={key}
+                                onClick={() => setSelectedEndpoint(key)}
+                                style={{ 
+                                  color: selectedEndpoint === key ? theme.primary : theme.textSecondary,
+                                  background: selectedEndpoint === key ? `${theme.primary}15` : 'transparent',
+                                  fontSize: '0.9375rem',
+                                  padding: '0.5rem',
+                                  borderRadius: '6px',
+                                  border: 'none',
+                                  textAlign: 'left',
+                                  cursor: 'pointer',
+                                  fontWeight: selectedEndpoint === key ? '600' : '400'
+                                }}
+                              >
+                                {endpoints[key].title}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 style={{ 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700', 
+                            color: theme.textSecondary,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            marginBottom: '1rem'
+                          }}>
+                            Reference
+                          </h3>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <button
+                              onClick={() => setSelectedEndpoint('errors')}
+                              style={{ 
+                                color: selectedEndpoint === 'errors' ? theme.primary : theme.textSecondary,
+                                background: selectedEndpoint === 'errors' ? `${theme.primary}15` : 'transparent',
+                                fontSize: '0.9375rem',
+                                padding: '0.5rem',
+                                borderRadius: '6px',
+                                border: 'none',
+                                textAlign: 'left',
+                                cursor: 'pointer',
+                                fontWeight: selectedEndpoint === 'errors' ? '600' : '400'
+                              }}
+                            >
+                              Error Handling
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div style={{ marginBottom: '3rem' }}>
+                        <h2 style={{ 
+                          fontSize: '2rem', 
+                          fontWeight: '700', 
+                          marginBottom: '0.75rem',
+                          color: theme.text
+                        }}>
+                          {current.title}
+                        </h2>
+                        <p style={{ fontSize: '1.125rem', color: theme.textSecondary, lineHeight: '1.6' }}>
+                          {current.description}
+                        </p>
+                      </div>
+
+                      {current.sections && current.sections.map((section, idx) => (
+                        <div key={idx} style={{ 
+                          marginBottom: '3rem',
+                          padding: '2rem',
+                          background: theme.surface,
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '12px'
+                        }}>
+                          <div style={{ marginBottom: '1.5rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+                              {section.method && (
+                                <span style={{
+                                  padding: '0.25rem 0.75rem',
+                                  background: section.method === 'POST' ? '#10b98120' : section.method === 'GET' ? '#3b82f620' : '#ef444420',
+                                  color: section.method === 'POST' ? '#10b981' : section.method === 'GET' ? theme.primary : '#ef4444',
+                                  borderRadius: '6px',
+                                  fontSize: '0.875rem',
+                                  fontWeight: '700',
+                                  fontFamily: 'monospace'
+                                }}>
+                                  {section.method}
+                                </span>
+                              )}
+                              <code style={{ 
+                                fontSize: '0.875rem',
+                                color: theme.text,
+                                fontFamily: 'monospace',
+                                wordBreak: 'break-all'
+                              }}>
+                                {section.path}
+                              </code>
+                            </div>
+                            {section.title && (
+                              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: theme.text, marginBottom: '0.5rem' }}>
+                                {section.title}
+                              </h3>
+                            )}
+                          </div>
+
+                          {section.requestBody && (
+                            <div style={{ marginBottom: '1.5rem' }}>
+                              <h4 style={{ 
+                                fontSize: '0.875rem',
+                                fontWeight: '600',
+                                color: theme.text,
+                                marginBottom: '0.75rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.05em'
+                              }}>
+                                Request
+                              </h4>
+                              <div style={{
+                                background: isDark ? '#0f172a' : '#f8fafc',
+                                border: `1px solid ${theme.border}`,
+                                borderRadius: '8px',
+                                padding: '1.25rem',
+                                fontFamily: 'monospace',
+                                fontSize: '0.875rem',
+                                overflowX: 'auto'
+                              }}>
+                                <pre style={{ margin: 0, color: theme.text, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                  {section.requestBody}
+                                </pre>
+                              </div>
+                            </div>
+                          )}
+
+                          {section.response && (
+                            <div style={{ marginBottom: section.notes ? '1.5rem' : 0 }}>
+                              <h4 style={{ 
+                                fontSize: '0.875rem',
+                                fontWeight: '600',
+                                color: theme.text,
+                                marginBottom: '0.75rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.05em'
+                              }}>
+                                Response
+                              </h4>
+                              <div style={{
+                                background: isDark ? '#0f172a' : '#f8fafc',
+                                border: `1px solid ${theme.border}`,
+                                borderRadius: '8px',
+                                padding: '1.25rem',
+                                fontFamily: 'monospace',
+                                fontSize: '0.875rem',
+                                overflowX: 'auto'
+                              }}>
+                                <pre style={{ margin: 0, color: theme.text, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                  {section.response}
+                                </pre>
+                              </div>
+                            </div>
+                          )}
+
+                          {section.notes && section.notes.length > 0 && (
+                            <div style={{
+                              marginTop: '1.5rem',
+                              padding: '1rem',
+                              background: `${theme.primary}10`,
+                              border: `1px solid ${theme.primary}30`,
+                              borderRadius: '8px'
+                            }}>
+                              <div style={{ fontSize: '0.9375rem', color: theme.text }}>
+                                {section.notes.map((note, i) => (
+                                  <div key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: i < section.notes.length - 1 ? '0.5rem' : 0 }}>
+                                    <span style={{ color: theme.primary, fontWeight: '600' }}>•</span>
+                                    <span>{note}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {current.notes && current.notes.length > 0 && (
+                        <div style={{
+                          marginBottom: '3rem',
+                          padding: '2rem',
+                          background: theme.surface,
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '12px'
+                        }}>
+                          <h3 style={{ 
+                            fontSize: '1.25rem',
+                            fontWeight: '600',
+                            color: theme.text,
+                            marginBottom: '1rem'
+                          }}>
+                            Important Notes
+                          </h3>
+                          <div style={{ fontSize: '0.9375rem', color: theme.text, lineHeight: '1.7' }}>
+                            {current.notes.map((note, i) => (
+                              <div key={i} style={{ display: 'flex', gap: '0.5rem', marginBottom: i < current.notes.length - 1 ? '0.75rem' : 0 }}>
+                                <span style={{ color: theme.primary, fontWeight: '600' }}>•</span>
+                                <span>{note}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {current.fields && Object.keys(groupedFields).length > 0 && (
+                        <div style={{
+                          marginBottom: '3rem',
+                          padding: '2rem',
+                          background: theme.surface,
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '12px'
+                        }}>
+                          <h3 style={{ 
+                            fontSize: '1.5rem',
+                            fontWeight: '700',
+                            marginBottom: '2rem',
+                            color: theme.text
+                          }}>
+                            Field Reference
+                          </h3>
+                          
+                          {Object.entries(groupedFields).map(([section, fields], sectionIdx) => (
+                            <div key={sectionIdx} style={{ marginBottom: sectionIdx < Object.keys(groupedFields).length - 1 ? '2.5rem' : 0 }}>
+                              <h4 style={{ 
+                                fontSize: '1.125rem',
+                                fontWeight: '600',
+                                marginBottom: '1rem',
+                                color: theme.text
+                              }}>
+                                {section}
+                              </h4>
+                              <div style={{ overflowX: 'auto' }}>
+                                <table style={{ 
+                                  width: '100%', 
+                                  borderCollapse: 'collapse',
+                                  fontSize: '0.875rem'
+                                }}>
+                                  <thead>
+                                    <tr style={{ borderBottom: `2px solid ${theme.border}` }}>
+                                      <th style={{ padding: '0.75rem', textAlign: 'left', color: theme.textSecondary, fontWeight: '600' }}>Field</th>
+                                      <th style={{ padding: '0.75rem', textAlign: 'left', color: theme.textSecondary, fontWeight: '600' }}>Type</th>
+                                      <th style={{ padding: '0.75rem', textAlign: 'left', color: theme.textSecondary, fontWeight: '600' }}>Required</th>
+                                      <th style={{ padding: '0.75rem', textAlign: 'left', color: theme.textSecondary, fontWeight: '600' }}>Description</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {fields.map((field, fieldIdx) => (
+                                      <tr key={fieldIdx} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                                        <td style={{ padding: '0.75rem', fontFamily: 'monospace', color: theme.primary, fontSize: '0.8125rem' }}>{field.name}</td>
+                                        <td style={{ padding: '0.75rem', fontFamily: 'monospace', color: theme.text, fontSize: '0.8125rem' }}>{field.type}</td>
+                                        <td style={{ padding: '0.75rem' }}>
+                                          <span style={{ 
+                                            padding: '0.125rem 0.5rem',
+                                            borderRadius: '4px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: '600',
+                                            background: field.required === 'Yes' ? '#10b98120' : '#64748b20',
+                                            color: field.required === 'Yes' ? '#10b981' : theme.textSecondary
+                                          }}>
+                                            {field.required}
+                                          </span>
+                                        </td>
+                                        <td style={{ padding: '0.75rem', color: theme.textSecondary, fontSize: '0.8125rem' }}>{field.desc}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          };
+
+          const LoginPage = () => (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 'calc(100vh - 200px)',
+              padding: '4rem 2rem',
+              background: theme.background
+            }}>
+              <div style={{
+                width: '100%',
+                maxWidth: '480px',
+                padding: '3.5rem',
+                borderRadius: '20px',
+                background: theme.surface,
+                border: `1px solid ${theme.border}`,
+                boxShadow: isDark 
+                  ? '0 20px 60px rgba(0, 0, 0, 0.5)' 
+                  : '0 20px 60px rgba(0, 0, 0, 0.1)'
+              }}>
+                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                  <AndromedaLogo size={48} />
+                </div>
+                
+                <h1 style={{
+                  fontSize: '2rem',
+                  fontWeight: '700',
+                  marginBottom: '0.5rem',
+                  color: theme.text,
+                  textAlign: 'center'
+                }}>
+                  Welcome back
+                </h1>
+                <p style={{
+                  textAlign: 'center',
+                  color: theme.textSecondary,
+                  marginBottom: '2.5rem',
+                  fontSize: '1rem'
+                }}>
+                  Sign in to your Andromeda dashboard
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <label style={{ fontWeight: '600', color: theme.text, fontSize: '0.875rem' }}>
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="you@company.com"
+                      style={{
+                        padding: '0.875rem',
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        background: theme.background,
+                        color: theme.text,
+                        outline: 'none'
+                      }}
+                      onFocus={e => e.target.style.borderColor = theme.primary}
+                      onBlur={e => e.target.style.borderColor = theme.border}
+                    />
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <label style={{ fontWeight: '600', color: theme.text, fontSize: '0.875rem' }}>
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="••••••••••"
+                      style={{
+                        padding: '0.875rem',
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        background: theme.background,
+                        color: theme.text,
+                        outline: 'none'
+                      }}
+                      onFocus={e => e.target.style.borderColor = theme.primary}
+                      onBlur={e => e.target.style.borderColor = theme.border}
+                    />
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: theme.text, cursor: 'pointer' }}>
+                      <input type="checkbox" style={{ cursor: 'pointer' }} />
+                      Remember me
+                    </label>
+                    <a href="#" style={{ fontSize: '0.875rem', color: theme.primary, textDecoration: 'none', fontWeight: '600' }}>
+                      Forgot password?
+                    </a>
+                  </div>
+
+                  <button style={{
+                    padding: '0.875rem',
+                    background: theme.primary,
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: `0 4px 12px ${theme.primary}40`
+                  }}>
+                    Sign In
+                  </button>
+                </div>
+
+                <div style={{ marginTop: '2rem', textAlign: 'center', color: theme.textSecondary, fontSize: '0.875rem' }}>
+                  Don't have an account?{' '}
+                  <a href="mailto:support@andromeda.channel" style={{ color: theme.primary, textDecoration: 'none', fontWeight: '600' }}>
+                    Contact Support
+                  </a>
+                </div>
+
+                <div style={{
+                  marginTop: '2.5rem',
+                  paddingTop: '2.5rem',
+                  borderTop: `1px solid ${theme.border}`
+                }}>
+                  <p style={{ textAlign: 'center', color: theme.textSecondary, marginBottom: '1rem', fontSize: '0.875rem' }}>
+                    Or continue with
+                  </p>
+                  <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button style={{
+                      flex: 1,
+                      padding: '0.875rem',
+                      border: `1px solid ${theme.border}`,
+                      borderRadius: '8px',
+                      background: theme.background,
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      color: theme.text
+                    }}>
+                      <span style={{ marginRight: '0.5rem' }}>🔐</span> SSO
+                    </button>
+                    <button style={{
+                      flex: 1,
+                      padding: '0.875rem',
+                      border: `1px solid ${theme.border}`,
+                      borderRadius: '8px',
+                      background: theme.background,
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      color: theme.text
+                    }}>
+                      <span style={{ marginRight: '0.5rem' }}>G</span> Google
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+
+          return (
+            <div style={{
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+              background: theme.background,
+              color: theme.text,
+              minHeight: '100vh'
+            }}>
+              <nav style={{
+                background: theme.surface,
+                borderBottom: `1px solid ${theme.border}`,
+                padding: '1.25rem 2rem',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100,
+                backdropFilter: 'blur(12px)',
+                backgroundColor: `${theme.surface}95`
+              }}>
+                <div style={{
+                  maxWidth: '1600px',
+                  margin: '0 auto',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
+                    <div onClick={() => setCurrentPage('home')} style={{ cursor: 'pointer' }}>
+                      <AndromedaLogo size={32} />
+                    </div>
+                    <div style={{ display: 'flex', gap: '2rem' }}>
+                      <button
+                        onClick={() => setCurrentPage('home')}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: currentPage === 'home' ? theme.text : theme.textSecondary,
+                          fontWeight: currentPage === 'home' ? '600' : '400',
+                          cursor: 'pointer',
+                          fontSize: '0.9375rem'
+                        }}>
+                        Platform
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setCurrentPage('docs');
+                          setApiView('overview');
+                        }}
+                        style={{ 
+                          background: 'none', 
+                          border: 'none', 
+                          color: currentPage === 'docs' ? theme.text : theme.textSecondary,
+                          fontWeight: currentPage === 'docs' ? '600' : '400',
+                          cursor: 'pointer', 
+                          fontSize: '0.9375rem' 
+                        }}>
+                        API Docs
+                      </button>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <button
+                      onClick={() => setIsDark(!isDark)}
+                      style={{
+                        padding: '0.5rem',
+                        background: 'transparent',
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '1.125rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                      {isDark ? '☀️' : '🌙'}
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage('login')}
+                      style={{
+                        padding: '0.625rem 1.25rem',
+                        background: currentPage === 'login' ? theme.primaryDark : theme.primary,
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        fontSize: '0.9375rem'
+                      }}>
+                      Sign In
+                    </button>
+                  </div>
+                </div>
+              </nav>
+
+              <main>
+                {currentPage === 'home' && <HomePage />}
+                {currentPage === 'docs' && <ApiDocsPage />}
+                {currentPage === 'login' && <LoginPage />}
+                {currentPage === 'privacy' && <PrivacyPage />}
+                {currentPage === 'terms' && <TermsPage />}
+              </main>
+
+              <footer style={{
+                background: theme.surface,
+                borderTop: `1px solid ${theme.border}`,
+                padding: '4rem 2rem 2rem'
+              }}>
+                <div style={{
+                  maxWidth: '1400px',
+                  margin: '0 auto'
+                }}>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '3rem',
+                    marginBottom: '3rem'
+                  }}>
+                    <div>
+                      <AndromedaLogo size={32} />
+                      <p style={{ color: theme.textSecondary, marginTop: '1rem', fontSize: '0.875rem', lineHeight: '1.6' }}>
+                        Healthcare workflow orchestration and data transformation for the API-first era.
+                      </p>
+                    </div>
+                    <div>
+                      <h3 style={{ color: theme.text, marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Product</h3>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <button onClick={() => setCurrentPage('home')} style={{ background: 'none', border: 'none', padding: 0, color: theme.textSecondary, textDecoration: 'none', fontSize: '0.9375rem', cursor: 'pointer', textAlign: 'left' }}>Platform</button>
+                        <button onClick={() => { setCurrentPage('docs'); setApiView('overview'); }} style={{ background: 'none', border: 'none', padding: 0, color: theme.textSecondary, textDecoration: 'none', fontSize: '0.9375rem', cursor: 'pointer', textAlign: 'left' }}>Documentation</button>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 style={{ color: theme.text, marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Resources</h3>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <button onClick={() => { setCurrentPage('docs'); setApiView('rest'); }} style={{ background: 'none', border: 'none', padding: 0, color: theme.textSecondary, textDecoration: 'none', fontSize: '0.9375rem', cursor: 'pointer', textAlign: 'left' }}>API Reference</button>
+                        <a href="mailto:support@andromeda.channel" style={{ color: theme.textSecondary, textDecoration: 'none', fontSize: '0.9375rem' }}>Integration Support</a>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 style={{ color: theme.text, marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Company</h3>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <a href="mailto:support@andromeda.channel" style={{ color: theme.textSecondary, textDecoration: 'none', fontSize: '0.9375rem' }}>Contact</a>
+                        <a href="mailto:support@andromeda.channel" style={{ color: theme.textSecondary, textDecoration: 'none', fontSize: '0.9375rem' }}>Support</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{
+                    paddingTop: '2rem',
+                    borderTop: `1px solid ${theme.border}`,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    color: theme.textSecondary,
+                    fontSize: '0.875rem'
+                  }}>
+                    <div>© 2025 Andromeda Channel Platform</div>
+                    <div style={{ display: 'flex', gap: '2rem' }}>
+                      <button onClick={() => setCurrentPage('privacy')} style={{ background: 'none', border: 'none', padding: 0, color: theme.textSecondary, textDecoration: 'none', cursor: 'pointer', fontSize: '0.875rem' }}>Privacy</button>
+                      <button onClick={() => setCurrentPage('terms')} style={{ background: 'none', border: 'none', padding: 0, color: theme.textSecondary, textDecoration: 'none', cursor: 'pointer', fontSize: '0.875rem' }}>Terms</button>
+                    </div>
+                  </div>
+                </div>
+              </footer>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<AndromedaPreview />);
+    </script>
+</body>
+</html>
